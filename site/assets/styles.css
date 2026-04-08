@@ -1,0 +1,318 @@
+:root{
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --border: #e5e7ef;
+  --text: #0f172a;
+  --muted: #5b6478;
+  --accent: #2563eb;
+  --accent2: #22c55e;
+  --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --radius: 14px;
+}
+
+*{ box-sizing: border-box; }
+html, body{ height:100%; }
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 32%),
+    linear-gradient(180deg, #f8fbff 0%, var(--bg) 240px);
+  color: var(--text);
+}
+
+.topbar{
+  position: sticky;
+  top:0;
+  z-index: 10;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar__inner{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  display:flex;
+  gap: 14px;
+  align-items:center;
+  justify-content: space-between;
+}
+.brand{ display:flex; flex-direction:column; gap:2px; }
+.brand__title{ font-weight: 800; letter-spacing: 0.2px; }
+.brand__subtitle{ color: var(--muted); font-size: 13px; }
+
+.topbar__actions{ display:flex; gap:8px; }
+.btn{
+  border:1px solid var(--border);
+  background: var(--panel);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor:pointer;
+  font-weight: 600;
+}
+.btn--ghost{ background: transparent; }
+.btn--mini{
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  background: #f8fafc;
+}
+.btn:hover{
+  border-color: rgba(37,99,235,0.28);
+  background: #f8fbff;
+}
+
+.container{
+  max-width: 1200px;
+  margin: 18px auto 60px;
+  padding: 0 18px;
+}
+
+.pageTitle{ margin: 0 0 8px; font-size: 26px; }
+.pageHint{ margin: 0 0 18px; color: var(--muted); }
+.pageHero{
+  display:flex;
+  align-items:flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 16px;
+}
+@media (max-width: 980px){
+  .grid2{ grid-template-columns: 1fr; }
+  .pageHero{ flex-direction: column; }
+}
+
+.card{
+  background: var(--panel);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card--sticky{
+  position: sticky;
+  top: 82px;
+  align-self: start;
+}
+@media (max-width: 980px){
+  .card--sticky{ position: static; }
+}
+.card__header{
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  display:flex;
+  align-items:flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+.card__title{ font-weight: 800; }
+.card__subtitle{ color: var(--muted); font-size: 12.5px; }
+.card__body{ padding: 14px 16px; }
+
+.divider{
+  height:1px;
+  background: var(--border);
+  margin: 14px 0;
+}
+
+.banner{
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #7c2d12;
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+
+.formRow{
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.label{
+  font-weight: 700;
+  font-size: 13px;
+}
+.labelRow{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.miniActions{
+  display:flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.input{
+  border:1px solid var(--border);
+  background: #fff;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+}
+.input:focus{
+  border-color: rgba(37,99,235,0.45);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+select[multiple].input{
+  min-height: 280px;
+  padding: 6px;
+}
+select[multiple].input option{
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+select[multiple].input option:checked{
+  background: linear-gradient(180deg, rgba(37,99,235,0.18), rgba(37,99,235,0.28));
+}
+
+.tableWrap{
+  border:1px solid var(--border);
+  border-radius: 12px;
+  overflow: auto;
+  max-height: 520px;
+  background: #fff;
+}
+
+.table{
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  font-size: 13px;
+}
+.table th, .table td{
+  border-bottom: 1px solid var(--border);
+  padding: 8px 10px;
+  vertical-align: top;
+  white-space: nowrap;
+}
+.table th{
+  position: sticky;
+  top:0;
+  background: #f8fafc;
+  z-index: 2;
+  font-weight: 800;
+}
+.table tr:hover td{ background: #f6f9ff; }
+
+.tdWrap{
+  white-space: pre-wrap !important;
+  max-width: 420px;
+  min-width: 260px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+
+.muted{ color: var(--muted); }
+.small{ font-size: 12.5px; }
+.summaryChips{
+  display:flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.summaryChip{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.84);
+  border: 1px solid rgba(37,99,235,0.12);
+  color: var(--text);
+  font-size: 13px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.05);
+}
+.summaryChip b{
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.statsGrid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.statCard{
+  border:1px solid var(--border);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff, #f8fbff);
+  padding: 12px;
+}
+.statCard__label{
+  font-size: 12px;
+  color: var(--muted);
+}
+.statCard__value{
+  margin-top: 4px;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+@media (max-width: 980px){
+  .summaryChips{ justify-content: flex-start; }
+  .statsGrid{ grid-template-columns: 1fr; }
+}
+
+/* ---------------------------
+   Evaluation charts layout
+   --------------------------- */
+.chartGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 980px){
+  .chartGrid{ grid-template-columns: 1fr; }
+}
+
+.chartCard{
+  border:1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 10px 10px;
+  background: #fff;
+}
+.chartCard__title{
+  font-weight: 850;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+/* Make canvas crisp */
+.canvasChart{
+  width: 100%;
+  display:block;
+  height: 260px; /* default */
+}
+
+/* NEW: taller charts for problem mode */
+.canvasChart--tall{
+  height: 520px;
+}
+
+/* ---------------------------
+   Pattern numeric list area
+   --------------------------- */
+#evPatternList .tableWrap{
+  max-height: 260px;
+}
+#evPatternList .table{
+  font-size: 12.5px;
+}
+#evPatternList th, #evPatternList td{
+  padding: 6px 8px;
+}

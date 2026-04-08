@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NLCO Benchmark Evaluation</title>
+
+  <link rel="stylesheet" href="./assets/styles.css?v=4" />
+  <script defer src="./assets/app.js?v=4"></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">
+        <div class="brand__title">NLCO Benchmark Evaluation</div>
+        <div class="brand__subtitle">Evaluate model performance</div>
+      </div>
+
+      <div class="topbar__actions">
+        <button id="btnReload" class="btn btn--ghost" title="Reload manifests and refresh UI">Reload</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="statusBanner" class="banner" style="display:none;"></div>
+
+    <section id="tabEval">
+      <div class="pageHero">
+        <div>
+          <h1 class="pageTitle">Evaluation</h1>
+          <p class="pageHint">Compare models, inspect problem gaps, and slice results by taxonomy.</p>
+        </div>
+        <div id="evSummaryChips" class="summaryChips" aria-label="Current evaluation summary"></div>
+      </div>
+
+      <div class="grid2">
+        <!-- Controls -->
+        <div class="card card--sticky">
+          <div class="card__header">
+            <div class="card__title">Controls</div>
+            <div class="card__subtitle">Adjust the slice, then inspect charts and the table.</div>
+          </div>
+
+          <div class="card__body">
+            <div id="evDataStats" class="statsGrid" aria-label="Dataset coverage stats"></div>
+
+            <div class="divider"></div>
+
+            <div class="formRow">
+              <label class="label" for="evSize">Size</label>
+              <select id="evSize" class="input">
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="overall">overall</option>
+              </select>
+            </div>
+
+            <div class="formRow">
+              <label class="label" for="evMode">Mode</label>
+              <select id="evMode" class="input">
+                <option value="model">Model comparison (aggregate over selected problems)</option>
+                <option value="problem">Problem gaps (aggregate over selected models)</option>
+                <option value="taxonomy">Taxonomy comparison</option>
+              </select>
+            </div>
+
+            <!-- Problems selector (hidden in taxonomy mode) -->
+            <div id="evProblemsBlock">
+              <div class="formRow">
+                <div class="labelRow">
+                  <label class="label" for="evProblems">Problems (multi-select)</label>
+                  <div class="miniActions">
+                    <button id="evProblemsSelectAll" type="button" class="btn btn--mini">All</button>
+                    <button id="evProblemsClear" type="button" class="btn btn--mini">Clear</button>
+                  </div>
+                </div>
+                <select id="evProblems" class="input" multiple size="14"></select>
+              </div>
+            </div>
+
+            <div class="formRow">
+              <div class="labelRow">
+                <label class="label" for="evModels">Models (multi-select)</label>
+                <div class="miniActions">
+                  <button id="evModelsSelectAll" type="button" class="btn btn--mini">All</button>
+                  <button id="evModelsClear" type="button" class="btn btn--mini">Clear</button>
+                </div>
+              </div>
+              <select id="evModels" class="input" multiple size="14"></select>
+              <div class="muted small">Tip: Hold Ctrl / Cmd to select multiple items, or use the quick buttons.</div>
+            </div>
+
+            <!-- Taxonomy selector (only taxonomy mode) -->
+            <div id="evTaxonomyBlock" style="display:none;">
+              <div class="formRow">
+                <label class="label" for="evTaxonomy">Taxonomy</label>
+                <select id="evTaxonomy" class="input">
+                  <option value="group">group (GRAPH/PACK/COUNT/COMP)</option>
+                  <option value="var_sort">var_sort (Graph/Int/Set)</option>
+                  <option value="objective">objective (linear/quadratic/bottleneck)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="formRow">
+              <label class="label" for="evMetric">Primary metric</label>
+              <select id="evMetric" class="input">
+                <option value="acc">accuracy (higher is better)</option>
+                <option value="AFR">AFR (higher is better)</option>
+                <option value="ALOG">ALOG (lower is better)</option>
+                <option value="tok">tok. (lower is better)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="card">
+          <div class="card__header">
+            <div class="card__title">Results</div>
+            <div class="card__subtitle" id="evResultsMeta">Waiting for selection…</div>
+          </div>
+
+          <div class="card__body">
+            <!-- SVG block (only taxonomy mode; app.js toggles it) -->
+            <div id="evSvgBlock" style="display:none;">
+              <!-- Put your SVG here (inline) or reference it via <img src="./assets/xxx.svg"> -->
+              <!-- Example:
+              <div class="chartCard" style="padding:12px;">
+                <div class="chartCard__title">Taxonomy illustration</div>
+                <img src="./assets/taxonomy.svg" style="width:100%; height:auto; display:block;" alt="taxonomy diagram"/>
+              </div>
+              -->
+            </div>
+
+            <div id="evSvgDivider" class="divider" style="display:none;"></div>
+
+            <!-- Charts -->
+            <div id="evChartsBlock">
+              <div class="chartStack">
+  <div class="chartCard">
+    <div class="chartCard__title" id="evMetricChartTitle">Metric chart</div>
+    <canvas id="evMetricCanvas" class="canvasChart" height="260"></canvas>
+  </div>
+
+  <div class="chartCard">
+    <div class="chartCard__title">Pattern distribution</div>
+    <canvas id="evPatternCanvas" class="canvasChart" height="260"></canvas>
+
+    <div id="evPatternList" style="margin-top:10px;">
+      <div class="muted small">No pattern data.</div>
+    </div>
+
+    <div id="evPatternLegend" style="display:none;"></div>
+  </div>
+</div>
+
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Aggregated results table -->
+            <div class="tableWrap" id="evTableWrap">
+              <div class="muted">No results yet.</div>
+            </div>
+
+            <div class="divider"></div>
+
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- footer removed (per request) -->
+</body>
+</html>
